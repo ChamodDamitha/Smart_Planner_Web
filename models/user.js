@@ -7,6 +7,23 @@ var userSchema = mongoose.Schema({
     name: String,
     email: String
 });
+
+userSchema.pre("save",function (next) {
+    var u=this;
+    User.findOne({email:u.email},function (err,user) {
+        if(err) {
+            next(err);
+        }
+        if(user!=null) {
+            next(new Error("email already exists"));
+        }
+        else {
+            next();
+        }
+    });
+})
+
+
 var User = mongoose.model("User", userSchema);
 
 module.exports = User;

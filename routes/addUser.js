@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 
     newUser.save(function (err,User) {
         if(err){
-            res.send("User cannot be added...!");
+            res.send(err.toString());
         }
         else{
             res.send("User was added successfully...!");
