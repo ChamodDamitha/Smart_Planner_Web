@@ -12,7 +12,7 @@ var app = express();
 
 //Mongooose - MongoDB setup
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/smart_planner_web');
+mongoose.connect('mongodb://localhost:27017/smart_planner_web');
 
 
 
