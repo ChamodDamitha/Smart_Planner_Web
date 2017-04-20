@@ -5,7 +5,8 @@ var mongoose = require('mongoose');
 
 var userSchema = mongoose.Schema({
     name: String,
-    email: String
+    email: String,
+    daily_data: { type : Array , default : [] }
 });
 
 userSchema.pre("save",function (next) {

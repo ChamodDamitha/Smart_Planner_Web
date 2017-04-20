@@ -6,17 +6,32 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 
+//,............................... New Code
+var mongo = require('mongodb');
+var monk = require('monk');
+var db = monk('localhost:27017/smart_planner_web');
+
+
 //......................route handlers..................................................................................
 var index = require('./routes/index');
 var addUser = require('./routes/addUser');
 var updateUser = require('./routes/updateUser');
+var saveDailyData = require('./routes/saveDailyData');
 //......................................................................................................................
 
 var app = express();
 
-//Mongooose - MongoDB setup
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/smart_planner_web');
+// Make our db accessible to our router
+app.use(function(req,res,next){
+    req.db = db;
+    next();
+});
+
+
+
+// //Mongooose - MongoDB setup
+// var mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost:27017/smart_planner_web');
 
 
 
@@ -37,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/addUser', addUser);
 app.use('/updateUser', updateUser);
+app.use('/saveDailyData', saveDailyData);
 //......................................................................................................................
 
 

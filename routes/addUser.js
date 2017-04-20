@@ -9,19 +9,36 @@ var User=require('../models/user');
 
 router.post('/', function(req, res, next) {
 
-    var newUser=new User({
-        name: req.body.name,
-        email: req.body.email
-    });
+    var db = req.db;
+    var collection = db.get('users');
 
-    newUser.save(function (err,User) {
-        if(err){
+
+    collection.findOne({email:req.body.email},function (err,user) {
+        if(err) {
             res.send(JSON.stringify({success:false,msg:err.toString()}));
         }
-        else{
-            res.send(JSON.stringify({success:true,msg:"User was added successfully...!"}));
+        if(user!=null) {
+            res.send(JSON.stringify({success:false,msg:"email already exists"}));
+        }
+        else {
+            collection.insert(
+                {
+                    name: req.body.name,
+                    email: req.body.email,
+                    daily_data:[]
+                },
+            function (err,data) {
+                if(err) {
+                    res.send(JSON.stringify({success:false,msg:err.toString()}));
+                }
+                if(data!=null) {
+                    res.send(JSON.stringify({success:true,msg:data}));
+                }
+            })
+
         }
     });
+
 });
 
 
