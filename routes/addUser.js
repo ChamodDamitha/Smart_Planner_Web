@@ -7,19 +7,19 @@ var router = express.Router();
 
 var User=require('../models/user');
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
 
     var newUser=new User({
-        name: req.query.name,
-        email: req.query.email
+        name: req.body.name,
+        email: req.body.email
     });
 
     newUser.save(function (err,User) {
         if(err){
-            res.send(err.toString());
+            res.send(JSON.stringify({success:false,msg:err.toString()}));
         }
         else{
-            res.send("User was added successfully...!");
+            res.send(JSON.stringify({success:true,msg:"User was added successfully...!"}));
         }
     });
 });
