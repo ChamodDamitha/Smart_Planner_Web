@@ -25,7 +25,9 @@ router.post('/', function(req, res, next) {
                 {
                     name: req.body.name,
                     email: req.body.email,
-                    daily_data:[]
+                    daily_data:[],
+                    daily_report:[],
+                    predicted_schedule:{}
                 },
             function (err,data) {
                 if(err) {

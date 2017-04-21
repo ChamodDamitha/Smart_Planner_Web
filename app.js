@@ -17,6 +17,7 @@ var index = require('./routes/index');
 var addUser = require('./routes/addUser');
 var updateUser = require('./routes/updateUser');
 var saveDailyData = require('./routes/saveDailyData');
+var getDailyReport = require('./routes/getDailyReport');
 //......................................................................................................................
 
 var app = express();
@@ -53,6 +54,7 @@ app.use('/', index);
 app.use('/addUser', addUser);
 app.use('/updateUser', updateUser);
 app.use('/saveDailyData', saveDailyData);
+app.use('/getDailyReport', getDailyReport);
 //......................................................................................................................
 
 

@@ -19,7 +19,7 @@ router.post('/', function(req, res, next) {
         if(user!=null) {
             user.daily_data.push(req.body.daily_data);
 
-            collection.update({email: user.email}, {daily_data: user.daily_data}, function (err, data) {
+            collection.update({email: user.email}, {$set : {daily_data: user.daily_data} }, function (err, data) {
                 if (err != null) {
                     res.send(JSON.stringify({success: false, msg: err}));
                 }
@@ -27,6 +27,7 @@ router.post('/', function(req, res, next) {
                     res.send(JSON.stringify({success: false, msg: data}));
                 }
             });
+
         }
 
     });
