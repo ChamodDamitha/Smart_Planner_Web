@@ -84,3 +84,5 @@ exports.getReport = function (user,date) {
        report.completion=(completed*100/total).toFixed(2);
        return report;
  }
+
+
