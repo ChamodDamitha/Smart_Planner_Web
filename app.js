@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 
 //,............................... New Code
-var mongo = require('mongodb');
+// var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/smart_planner_web');
 
@@ -18,6 +18,7 @@ var addUser = require('./routes/addUser');
 var updateUser = require('./routes/updateUser');
 var saveDailyData = require('./routes/saveDailyData');
 var getDailyReport = require('./routes/getDailyReport');
+var getPredictedSchedule = require('./routes/getPredictedSchedule');
 //......................................................................................................................
 
 var app = express();
@@ -55,6 +56,7 @@ app.use('/addUser', addUser);
 app.use('/updateUser', updateUser);
 app.use('/saveDailyData', saveDailyData);
 app.use('/getDailyReport', getDailyReport);
+app.use('/getPredictedSchedule', getPredictedSchedule);
 //......................................................................................................................
 
 

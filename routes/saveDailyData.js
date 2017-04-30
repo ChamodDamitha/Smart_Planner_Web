@@ -31,23 +31,13 @@ router.post('/', function(req, res, next) {
                     res.send(JSON.stringify({success: false, msg: err}));
                 }
                 else {
-                    res.send(JSON.stringify({success: false, msg: data}));
+                    res.send(JSON.stringify({success: true, msg: data}));
                 }
             });
 
         }
 
     });
-
-
-    // User.findOne({email:req.body.user_email},function (err,user) {
-    //
-    //     user.daily_data.push(req.body.daily_data);
-    //
-    //     user.save(true);
-    //
-    //     res.send(JSON.stringify({success:false,msg:user.daily_data}));
-    // });
 
 });
 
