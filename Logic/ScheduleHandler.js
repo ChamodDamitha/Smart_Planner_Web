@@ -12,32 +12,44 @@ var friday = monk('localhost:27017/smart_planner_web').get("friday");
 var saturday = monk('localhost:27017/smart_planner_web').get("saturday");
 var sunday = monk('localhost:27017/smart_planner_web').get("sunday");
 
-exports.getSchedule = function (user,day) {
+exports.getSchedule = function (user,day,res) {
 
     if(day=="MON"){
-        return monday.find({userId:user.id});
+        monday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="TUE"){
-        return tuesday.find({userId:user.id});
+        tuesday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="WED"){
-        return wednesday.find({userId:user.id});
+        wednesday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="THU"){
-        return thursday.find({userId:user.id});
+        thursday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="FRI"){
-        return friday.find({userId:user.id});
+        friday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="SAT"){
-        return saturday.find({userId:user.id});
+        saturday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
     if(day=="SUN"){
-        return sunday.find({userId:user.id});
+        sunday.findOne({user_email:user.email},function (err,data) {
+            res.send(JSON.stringify({success:true,msg:data}));
+        });
     }
 
-
-    return null;
 }
 
 
@@ -119,11 +131,10 @@ function updateCollection(db,tasks,user) {
         var task = tasks[0];
 
         db.findOne({user_email: user.email}, function (err, u) {
-            console.log(u);
             if (u == null) {
                 db.insert({user_email: user.email, tasks: [{time: task.time, task: task}]}, function (err, data) {
                     if (data != null) {
-                        console.log("new  user added - " + data);
+                        console.log("new user schedule added - " + data);
                         tasks.splice(0,1);
                         updateCollection(db,tasks,user);
                     }
@@ -143,7 +154,7 @@ function updateCollection(db,tasks,user) {
                 }
                 db.update({user_email: user.email}, u, function (err, data) {
                     if (data != null) {
-                        console.log("new user updated - " + data);
+                        console.log("schedule updated - " + data);
                         tasks.splice(0,1);
                         updateCollection(db,tasks,user);
                     }
