@@ -33,7 +33,7 @@ exports.getReport = function (user,date) {
 }
 
 
- function generateReport(daily_data) {
+function generateReport(daily_data) {
        var report={
            date:daily_data.date,
            completed_tasks:[],

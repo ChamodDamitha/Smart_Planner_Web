@@ -19,6 +19,7 @@ var updateUser = require('./routes/updateUser');
 var saveDailyData = require('./routes/saveDailyData');
 var getDailyReport = require('./routes/getDailyReport');
 var getPredictedSchedule = require('./routes/getPredictedSchedule');
+var test = require('./routes/test');
 //......................................................................................................................
 
 var app = express();
@@ -57,6 +58,7 @@ app.use('/updateUser', updateUser);
 app.use('/saveDailyData', saveDailyData);
 app.use('/getDailyReport', getDailyReport);
 app.use('/getPredictedSchedule', getPredictedSchedule);
+app.use('/test', test);
 //......................................................................................................................
 
 

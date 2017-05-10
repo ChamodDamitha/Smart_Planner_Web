@@ -44,24 +44,24 @@ exports.getSchedule = function (user,day) {
 exports.updateSchedule = function (user,day) {
     for(var i=0;i<user.daily_data.length;i++) {
         var d = user.daily_data[i];
+
         setSchedule(d,day,user);
     }
 }
 
 
 function setSchedule(daily_data,day,user) {
-
+    var tasks=[];
     for(var i=0;i<daily_data.fulltasks.length;i++){
         var t=daily_data.fulltasks[i];
 
         var recent_task={
             type:"FULL",
-            desc:t.desc,
+            desc:t.description,
             location:t.location,
-            time:getNearestTime(t.time)
+            time:getNearestTime(t)
         };
-        insertTask(recent_task,day,user);
-
+        tasks.push(recent_task);
     }
 
     for(var i=0;i<daily_data.timetasks.length;i++){
@@ -69,11 +69,10 @@ function setSchedule(daily_data,day,user) {
 
         var recent_task={
             type:"TIME",
-            desc:t.desc,
-            time:getNearestTime(t.time)
+            desc:t.description,
+            time:getNearestTime(t)
         };
-        insertTask(recent_task,day,user);
-
+        tasks.push(recent_task);
     }
 
     for(var i=0;i<daily_data.locationtasks.length;i++){
@@ -81,76 +80,79 @@ function setSchedule(daily_data,day,user) {
 
         var recent_task={
             type:"LOCATION",
-            desc:t.desc,
+            desc:t.description,
             location:t.location
         };
-        insertTask(recent_task,day,user);
-
+        tasks.push(recent_task);
     }
 
-
+    insertTasks(tasks,day,user);
 }
 
 
-function insertTask(task,day,user) {
+function insertTasks(tasks,day,user) {
     if(day=="MON"){
-        monday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(monday,tasks,user);
     }
     else if(day=="TUE"){
-        tuesday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(tuesday,tasks,user);
     }
     else if(day=="WED"){
-        wednesday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(wednesday,tasks,user);
     }
     else if(day=="THU"){
-        thursday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(thursday,tasks,user);
     }
     else if(day=="FRI"){
-        friday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(friday,tasks,user);
     }
     else if(day=="SAT"){
-        saturday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(saturday,tasks,user);
     }
     else if(day=="SUN"){
-        sunday.update({userId:user.id,time:task.time},task,function (err,data) {
-            if (err != null) {
-                return false;
-            }
-            return true;
-        });
+        updateCollection(sunday,tasks,user);
     }
 }
 
+function updateCollection(db,tasks,user) {
+    if(tasks.length!=0) {
+        var task = tasks[0];
+
+        db.findOne({user_email: user.email}, function (err, u) {
+            console.log(u);
+            if (u == null) {
+                db.insert({user_email: user.email, tasks: [{time: task.time, task: task}]}, function (err, data) {
+                    if (data != null) {
+                        console.log("new  user added - " + data);
+                        tasks.splice(0,1);
+                        updateCollection(db,tasks,user);
+                    }
+                });
+            }
+            else {
+                var task_added = false;
+                for (var i = 0; i < u.tasks.length; i++) {
+                    if (u.tasks[i].time == task.time) {
+                        u.tasks[i].task = task;
+                        task_added = true;
+                        break;
+                    }
+                }
+                if (!task_added) {
+                    u.tasks.push({time: task.time, task: task});
+                }
+                db.update({user_email: user.email}, u, function (err, data) {
+                    if (data != null) {
+                        console.log("new user updated - " + data);
+                        tasks.splice(0,1);
+                        updateCollection(db,tasks,user);
+                    }
+                });
+            }
+        });
+
+    }
+}
 
 function getNearestTime(task) {
     var h=parseInt(task.time.split(":")[0]);

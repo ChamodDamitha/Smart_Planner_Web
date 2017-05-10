@@ -16,7 +16,7 @@ router.post('/', function(req, res, next) {
     collection.findOne({email:req.body.user_email},function(e,user){
 
         if(user!=null) {
-            res.send(JSON.stringify({success:true,msg:scheduleHandler.getSchedule(user,req.body.date)}));
+            res.send(JSON.stringify({success:true,msg:scheduleHandler.getSchedule(user,req.body.daily_data.day)}));
         }
         else
         {
@@ -30,6 +30,3 @@ router.post('/', function(req, res, next) {
 
 
 module.exports = router;
-/**
- * Created by chamod on 4/21/17.
- */

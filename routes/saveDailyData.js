@@ -7,7 +7,7 @@ var express = require('express');
 var router = express.Router();
 
 
-var User=require('../models/user');
+var scheduleHandler=require("../Logic/ScheduleHandler");
 
 
 router.post('/', function(req, res, next) {
@@ -26,12 +26,17 @@ router.post('/', function(req, res, next) {
 
             user.daily_data.push(req.body.daily_data);
 
+
+            // var x=scheduleHandler.updateSchedule(user,req.body.daily_data.day);
+            // res.send(JSON.stringify({success: false, msg: user}));
+
             collection.update({email: user.email}, {$set : {daily_data: user.daily_data} }, function (err, data) {
                 if (err != null) {
                     res.send(JSON.stringify({success: false, msg: err}));
                 }
                 else {
-                    res.send(JSON.stringify({success: true, msg: data}));
+                    var x=scheduleHandler.updateSchedule(user,req.body.daily_data.day);
+                    res.send(JSON.stringify({success: true, msg:x }));
                 }
             });
 
