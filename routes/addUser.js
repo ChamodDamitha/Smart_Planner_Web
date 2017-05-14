@@ -18,7 +18,7 @@ router.post('/', function(req, res, next) {
             res.send(JSON.stringify({success:false,msg:err.toString()}));
         }
         if(user!=null) {
-            res.send(JSON.stringify({success:false,msg:"email already exists"}));
+            res.send(JSON.stringify({success:true,msg:"Synced to the account...!"}));
         }
         else {
             collection.insert(
