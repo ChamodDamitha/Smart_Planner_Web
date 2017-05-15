@@ -5,6 +5,7 @@
 
 var monk = require('monk');
 var collection = monk('localhost:27017/smart_planner_web').get("users");
+var emailHandler = require("../Logic/EmailHandler");
 
 exports.getReport = function (user,date) {
 
@@ -23,7 +24,8 @@ exports.getReport = function (user,date) {
            user.daily_report.push(d_report)
            collection.update({email: user.email}, {$set : {daily_report: user.daily_report} }, function (err, data) {
            });
-
+           //send email report
+           emailHandler.sendEmail(d_report,email);
            return d_report;
 
        }

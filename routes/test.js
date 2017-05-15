@@ -10,6 +10,10 @@ var router = express.Router();
 
 
 router.get('/', function(req, res) {
+
+    var emailHandler=require("../Logic/EmailHandler");
+    emailHandler.sendEmail("d","hariniyasasri@gmail.com");
+
         res.send("working");
     }
 );
